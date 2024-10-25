@@ -1,0 +1,2 @@
+Run "OptimizePcOW2.bat" as admin to run the scipt.
+The powerplan may not get imported based on your computer, if so use "high powerplan". Also the powerplan that gets imported may make your cpu hot, please keep this in mind before running the scipt. Good cooling is adviced.
