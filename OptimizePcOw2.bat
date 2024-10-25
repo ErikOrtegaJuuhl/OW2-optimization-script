@@ -25,10 +25,9 @@ echo =====================================
 echo                MENU
 echo =====================================
 echo 1. Optimize PC settings
-echo 2. Best OW2 settings
+echo 2. Import best OW2 settings
 echo 3. Start up file *optional*
-echo 4. Apply All
-echo 5. Exit
+echo 4. Exit
 echo =====================================
 echo Credit to Chris Titus and Lecctron for all tweaks.
 set /p choice="Please enter your choice (1-5): "
@@ -36,8 +35,7 @@ set /p choice="Please enter your choice (1-5): "
 if "%choice%" == "1" goto optimize_pc
 if "%choice%" == "2" goto import_ow2_settings
 if "%choice%" == "3" goto setup_startup_script
-if "%choice%" == "4" goto apply_all
-if "%choice%" == "5" goto exit_script
+if "%choice%" == "4" goto exit_script
 goto menu
 
 :: Option 1 - Optimize PC for Gaming
@@ -148,8 +146,22 @@ goto menu
 cls
 echo Importing Overwatch 2 settings...
 
-:: Replace the existing settings file with the new one
-copy /y "%~dp0OW2-optimization-script\Settings_v0.ini" "%USERPROFILE%\Documents\Overwatch\Settings\Settings_v0.ini"
+:: Prompt user for screen specs
+set /p refreshRate="Enter your screen refresh rate (Normal refreshrates: 60, 144, 165, 200, 240): "
+set /p screenWidth="Enter your screen width (Normal widths: 1920, 2560): "
+set /p screenHeight="Enter your screen height (Normal heights: 1080, 1440): "
+set /p FrameRateCap="Enter what you want your FrameRateCap to be in ow2: "
+
+:: Update the [Render.13] section in the config file
+set "configFile=%USERPROFILE%\Documents\Overwatch\Settings\Settings_v0.ini"
+powershell -Command "
+$configFile = '%configFile%';
+(Get-Content $configFile) -replace '(?<=\[Render\.13\].*?FullScreenRefresh = )\d+', '$refreshRate' |
+    -replace '(?<=\[Render\.13\].*?FullScreenWidth = )\d+', '$screenWidth' |
+    -replace '(?<=\[Render\.13\].*?FullScreenHeight = )\d+', '$screenHeight' |
+    -replace '(?<=\[Render\.13\].*?FrameRateCap = )\d+', '$FrameRateCap' |
+    Set-Content $configFile
+"
 
 echo Overwatch 2 settings imported successfully!
 timeout /t 5
@@ -171,30 +183,3 @@ set "eventFilterXml=<QueryList><Query Id='0' Path='System'><Select Path='System'
 
 :: Create the scheduled task action
 powershell -Command "New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c `\"%batchScriptPath%`\"' | Register-ScheduledTask -Action $_ -Trigger (New-ScheduledTaskTrigger -AtStartup) -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable) -TaskName 'OW2 Startup Script' -Description 'Runs a batch script when Overwatch 2 starts' -User 'SYSTEM'"
-
-:: Add the event filter to the task
-powershell -Command "$task = Get-ScheduledTask -TaskName 'OW2 Startup Script'; $task.Xml = $task.Xml.Replace('<Select Path=\"System\">', '%eventFilterXml%'); $task | Set-ScheduledTask"
-
-echo Startup script for Overwatch 2 set up successfully!
-timeout /t 5
-goto menu
-
-:: Apply All
-:apply_all
-cls
-echo Applying all optimizations and settings...
-
-:: Call all the functions
-call :optimize_pc
-call :import_ow2_settings
-call :setup_startup_script
-
-echo All optimizations and settings applied successfully!
-timeout /t 5
-goto menu
-
-:: Restart Prompt
-:restart_prompt
-cls
-echo =====================================
-echo

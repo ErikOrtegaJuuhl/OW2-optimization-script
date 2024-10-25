@@ -1,8 +1,8 @@
 # Define the path to the batch script
-$batchScriptPath = "C:\Path\To\ow2_startup.bat"
+$batchScriptPath = "$PSScriptRoot\OW2-optimization-script\ow2_startup.bat"
 
 # Define the Overwatch 2 executable path
-$ow2ExecutablePath = "C:\Path\To\overwatch2.exe"
+$ow2ExecutablePath = "C:\Program Files (x86)\Overwatch\Overwatch.exe"
 
 # Create the XML for the event filter
 $eventFilterXml = @"
@@ -32,5 +32,5 @@ Register-ScheduledTask -Action $action -Trigger $trigger -Settings $settings -Ta
 # Add the event filter to the task
 $taskPath = "\OW2 Startup Script"
 $task = Get-ScheduledTask -TaskPath $taskPath
-$task.Xml = $task.Xml.Replace("<Select Path="System">", $eventFilterXml)
+$task.Xml = $task.Xml.Replace("<Select Path='System'>", $eventFilterXml)
 $task | Set-ScheduledTask
