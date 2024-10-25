@@ -26,7 +26,7 @@ echo                MENU
 echo =====================================
 echo 1. Optimize PC settings
 echo 2. Import best OW2 settings
-echo 3. Start up file *optional*
+echo 3. Start high p file *optional*
 echo 4. Exit
 echo =====================================
 echo Credit to Chris Titus and Lecctron for all tweaks.

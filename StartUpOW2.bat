@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 :: Define the program to monitor
-set "program_to_monitor=overwatch2.exe"
+set "program_to_monitor=Overwatch.exe"
 
 :check_program
 tasklist /FI "IMAGENAME eq %program_to_monitor%" 2>NUL | find /I "%program_to_monitor%" >NUL
