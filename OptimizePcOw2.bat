@@ -26,10 +26,10 @@ echo                MENU
 echo =====================================
 echo 1. Optimize PC settings
 echo 2. Import best OW2 settings
-echo 3. Start high p file *optional*
+echo 3. Start up file for OW2
 echo 4. Exit
 echo =====================================
-echo Credit to Chris Titus and Lecctron for all tweaks.
+echo Credit to Chris Titus, Lecctron and www.boostingfactory.com for all tweaks.
 set /p choice="Please enter your choice (1-5): "
 
 if "%choice%" == "1" goto optimize_pc
